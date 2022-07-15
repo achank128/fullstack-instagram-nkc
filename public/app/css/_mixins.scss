@@ -1,0 +1,43 @@
+@mixin btn-move {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background-color: rgba($color: $white-color, $alpha: 0.8);
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 3px 2px 15px -7px rgba(0, 0, 0, 0.69);
+  z-index: 1;
+}
+
+@mixin post {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  height: 0;
+  overflow: hidden;
+}
+
+@mixin photo-video {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+// 639px, 1023, 1399
+$breakpoints-down: (
+  "mobile": "638px",
+  "tablet": "1022px",
+  "lowpc": "1398px",
+);
+
+@mixin breakpoint-down($size) {
+  @media (max-width: map-get($breakpoints-down, $size)) {
+    @content;
+  }
+}

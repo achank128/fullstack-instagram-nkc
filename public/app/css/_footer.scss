@@ -1,0 +1,28 @@
+.footer {
+  margin: 24px 0 60px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: $font-xsm;
+  @include breakpoint-down(mobile) {
+    font-size: 0.6rem;
+  }
+  .about {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    cursor: pointer;
+    a {
+      color: $text-gray;
+      padding: 0 10px;
+    }
+  }
+  .end {
+    display: flex;
+    color: $text-gray;
+    span {
+      margin-right: 16px;
+    }
+  }
+}

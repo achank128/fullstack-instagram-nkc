@@ -1,0 +1,127 @@
+.rightbar {
+  flex: 3;
+  padding: 30px 0px 0px 30px;
+  position: relative;
+  .rightbar-content {
+    position: fixed;
+  }
+  @include breakpoint-down(mobile) {
+    display: none;
+  }
+  .rightbar-account-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 300px;
+    @include breakpoint-down(tablet) {
+      width: 250px;
+    }
+    img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+    }
+    .account-info-text {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      margin-left: 15px;
+    }
+    .account-username {
+      font-size: $font-sm;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .account-name {
+      color: $text-gray;
+      font-size: $font-sm;
+      margin: 0;
+    }
+  }
+  .btn-account-follow,
+  .btn-account-switch {
+    color: $text-blue;
+    font-size: $font-xsm;
+    font-weight: 500;
+  }
+  .account-suggest {
+    display: flex;
+    flex-direction: column;
+    padding-top: 12px;
+    .account-suggest-text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      p {
+        font-size: $font-sm;
+        color: $text-gray;
+        font-weight: 500;
+      }
+    }
+    .account-suggest-info {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+      padding-left: 8px;
+      img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+      }
+      .account-suggest-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        margin-left: 12px;
+      }
+      .account-suggest-username {
+        font-size: $font-sm;
+        font-weight: 500;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+      .account-suggest-name {
+        font-size: $font-xsm;
+        font-weight: 400;
+        color: $text-gray;
+      }
+    }
+    .see-all {
+      color: $text-color;
+    }
+  }
+  .bottom-info {
+    color: $text-gray-light;
+    font-size: $font-xsm;
+    margin-top: 30px;
+    .about {
+      width: 250px;
+      display: flex;
+      flex-wrap: wrap;
+      cursor: pointer;
+      a {
+        color: $text-gray-light;
+        margin: 0 2px;
+      }
+    }
+    .end {
+      margin: 30px 0;
+    }
+  }
+}
+//Loading following
+.loading-following-rightbar {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+}

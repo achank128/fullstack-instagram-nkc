@@ -1,0 +1,94 @@
+#form {
+  margin: 34px auto;
+  width: 350px;
+  img {
+    width: 100%;
+  }
+
+  .form-content,
+  .form-account {
+    background-color: $white-color;
+    border: 1px solid $border-color;
+    margin-bottom: 10px;
+  }
+
+  .form-content {
+    padding-top: 46px;
+    .logo {
+      margin: 0 auto;
+      width: 175px;
+    }
+    .desc {
+      width: 268px;
+      margin: 0 auto;
+      font-size: $font-smp;
+      color: $text-gray;
+      font-weight: 500;
+      text-align: center;
+    }
+    form {
+      padding: 20px 40px;
+      display: flex;
+      flex-direction: column;
+      .error-msg {
+        color: red;
+        visibility: hidden;
+        margin-top: -20px;
+        margin-bottom: 10px;
+      }
+      input {
+        padding: 10px 8px;
+        margin-bottom: 8px;
+        background-color: $background;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        font-size: $font-xsm;
+        &:focus {
+          outline: none;
+        }
+      }
+      p {
+        color: $text-gray;
+        font-size: $font-xsm;
+        text-align: center;
+        padding-top: 8px;
+      }
+      .btn-submit {
+        margin: 16px 0;
+        background-color: $text-blue;
+        color: $white-color;
+        font-weight: 600;
+        border-radius: 6px;
+        padding: 8px 10px;
+        &:hover {
+          background-color: #0681d4;
+        }
+      }
+    }
+  }
+  .form-account {
+    padding: 24px;
+    text-align: center;
+    font-size: $font-sm;
+    span {
+      color: $text-blue;
+    }
+  }
+
+  .form-getapp {
+    text-align: center;
+    padding: 10px;
+    p {
+      font-size: $font-sm;
+      margin-bottom: 16px;
+    }
+    .download {
+      display: flex;
+      justify-content: center;
+      a {
+        width: 136px;
+        padding: 4px;
+      }
+    }
+  }
+}

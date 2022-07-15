@@ -1,0 +1,245 @@
+.profile {
+  margin-top: $nav-height;
+  display: flex;
+  flex-direction: column;
+  padding-top: 30px;
+}
+.profile-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 44px;
+  @include breakpoint-down(tablet) {
+    margin: 0;
+  }
+}
+.profile-user-img {
+  width: 33.33%;
+  height: 100%;
+  display: flex;
+  margin-right: 30px;
+  img {
+    margin: 0 auto;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    @include breakpoint-down(tablet) {
+      width: 80px;
+      height: 80px;
+    }
+  }
+}
+.bottom-bio {
+  display: none;
+  flex-direction: column;
+  padding: 16px 0px 16px 16px;
+  @include breakpoint-down(tablet) {
+    text-align: center;
+    display: flex;
+  }
+  @include breakpoint-down(mobile) {
+    text-align: left;
+  }
+  .name {
+    font-weight: 500;
+  }
+  .bio {
+    font-size: $font-sm;
+    color: #00376b;
+  }
+}
+.bottom-follower {
+  display: none;
+  @include breakpoint-down(tablet) {
+    display: flex;
+  }
+  justify-content: space-around;
+  padding: 10px 0;
+  border-top: 1px solid $border-color;
+  div {
+    text-align: center;
+    p {
+      font-weight: 500;
+      margin-right: 5px;
+    }
+    @include breakpoint-down(mobile) {
+      font-size: $font-sm;
+    }
+  }
+}
+.profile-info-detail {
+  width: 66.66%;
+  display: flex;
+  flex-direction: column;
+  .top {
+    position: relative;
+    margin-top: 6px;
+    display: flex;
+    margin-bottom: 20px;
+    @include breakpoint-down(mobile) {
+      flex-direction: column;
+    }
+    .username {
+      font-size: $font-xlg;
+      font-weight: 300;
+      margin-right: 10px;
+    }
+    .btn-edit-profile {
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      font-size: $font-sm;
+      font-weight: 500;
+      padding: 5px 9px;
+      text-align: center;
+      margin: 0 10px;
+      cursor: pointer;
+      @include breakpoint-down(mobile) {
+        margin: 10px 0 0 -4px;
+      }
+    }
+    .btn-setting-profile {
+      font-size: $font-lg;
+      @include breakpoint-down(mobile) {
+        position: absolute;
+        top: 0;
+        right: 20px;
+      }
+    }
+  }
+  .mid {
+    display: flex;
+    margin-bottom: 20px;
+    @include breakpoint-down(tablet) {
+      display: none;
+    }
+    div {
+      display: flex;
+      margin-right: 40px;
+
+      p {
+        font-weight: 500;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    @include breakpoint-down(tablet) {
+      display: none;
+    }
+    .name {
+      font-weight: 500;
+    }
+    .bio {
+      color: #00376b;
+    }
+  }
+}
+.post-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid $border-color;
+  @include breakpoint-down(mobile) {
+    justify-content: space-around;
+  }
+  a {
+    display: flex;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: $font-xsm;
+    font-weight: 500;
+    padding: 20px 0;
+    margin: -1px 60px 0 0;
+    &:last-child {
+      margin: -1px 0 0 0;
+    }
+    color: $text-gray;
+    letter-spacing: 1px;
+    i {
+      margin-right: 6px;
+    }
+    @include breakpoint-down(mobile) {
+      padding: 10px;
+      margin: 0;
+      p {
+        display: none;
+      }
+      i {
+        font-size: $font-lg;
+      }
+    }
+  }
+  .active-bar {
+    border-top: 1px solid $text-color;
+    color: $text-color;
+    @include breakpoint-down(mobile) {
+      color: $text-blue;
+      border: none;
+    }
+  }
+}
+
+.profile-posts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  @include breakpoint-down(tablet) {
+    gap: 2px;
+  }
+  .post-photo,
+  .post-video {
+    @include post;
+  }
+
+  .photo,
+  .video {
+    @include photo-video;
+  }
+  .multiphoto {
+    display: none;
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    color: $white-color;
+    font-size: $font-xlg;
+    transform: rotate(270deg);
+  }
+
+  .hover-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    .amount {
+      width: 100%;
+      height: 100%;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      color: $white-color;
+      span {
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        @include breakpoint-down(mobile) {
+          padding: 6px;
+        }
+        i {
+          margin-right: 5px;
+          font-size: $font-med;
+        }
+      }
+    }
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.3);
+      .amount {
+        display: flex;
+      }
+    }
+  }
+}
