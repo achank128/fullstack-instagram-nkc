@@ -1,7 +1,5 @@
-// export const IMGURL = "https://instagram-api-nkc.herokuapp.com/image/";
-// export const BASE_URL = "https://instagram-api-nkc.herokuapp.com/api";
-export const IMGURL = "http://localhost:5000/image/";
-export const BASE_URL = "http://localhost:5000/api";
+export const IMGURL = "https://instagram-api-nkc.herokuapp.com/image/";
+export const BASE_URL = "https://instagram-api-nkc.herokuapp.com/api";
 export const myAccount = JSON.parse(localStorage.getItem("user"));
 
 export const formater = Intl.NumberFormat("en-US");
