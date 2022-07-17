@@ -1,10 +1,8 @@
-const BASE_URL = "https://instagram-api-nkc.herokuapp.com/api";
+import { BASE_URL } from "./data.js";
 
 export const publicRequest = axios.create({
   baseURL: BASE_URL,
 });
-
-const token = localStorage.getItem("token");
 
 export const userRequest = axios.create({
   baseURL: BASE_URL,

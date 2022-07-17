@@ -11,6 +11,8 @@ import {
 } from "./data.js";
 import { userRequest } from "./api.js";
 
+if (!myAccount) location.replace("./index.html");
+
 //API
 const getFollowUsers = async () => {
   try {
@@ -57,8 +59,18 @@ const getPostComments = async (id) => {
   }
 };
 
+const getPost = async (id) => {
+  try {
+    const res = await userRequest.get("/posts/" + id);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const Posts = await getTimelinePost();
 const Users = await getFollowUsers();
+Posts.sort((a, b) => a.createdAt - b.createdAt);
 Users.push(myAccount);
 
 //RIGHTBAR
@@ -88,7 +100,9 @@ accountSuggestList.innerHTML = suggestUsers
         alt="avt"
       />
     <div class="account-suggest-text">
-      <a class="account-suggest-username">${user.username}</a>
+      <a href="./profile.html?${
+        user.username
+      }" class="account-suggest-username">${user.username}</a>
       <p class="account-suggest-name">Followed by ${user.username}</p>
     </div>
     <div class="loading-following-rightbar">
@@ -143,10 +157,12 @@ storyContent.innerHTML = Users.map((user) => {
     return `
     <div class="story-post">
       <span class="story-outline">
-        <img
-          src=${IMGURL + user.profilePicture}
-          alt="avt"
-        />
+        <a href="./profile.html?${user.username}">
+          <img
+            src=${IMGURL + user.profilePicture}
+            alt="avt"
+          />
+        </a>
       </span>
       <p class="username">${user.username}</p>
     </div>
@@ -287,49 +303,43 @@ const handlePostVideo = (post) => {
   });
 };
 
-const likePost = (post) => {
+const likePost = (post, postUpdate) => {
+  const id = post.dataset.id;
+  const postImage = post.querySelector(".post-image");
   const heart = post.querySelector(".heart");
   const heartActive = post.querySelector(".heart-active");
-  const postImage = post.querySelector(".post-image");
   const likeAmount = post.querySelector(".like-amount");
-  let isLiked = heartActive.classList.contains("active");
-  const id = post.dataset.id;
+  if (postUpdate) {
+    var heartActiveUpdate = postUpdate.querySelector(".heart-active");
+    var likeAmountUpdate = postUpdate.querySelector(".like-amount");
+  }
 
-  const updateLike = async (type) => {
-    if (type === "inc") {
-      const res = await userRequest.put("/posts/like/" + id);
-      likeAmount.innerHTML = `${formater.format(res.data.likes)} like${
-        res.data.likes > 1 ? "s" : ""
-      }`;
-      Posts;
-    } else if (type === "dec") {
-      const res = await userRequest.put("/posts/like/" + id);
-      likeAmount.innerHTML = `${formater.format(res.data.likes)} like${
+  const updateLike = async () => {
+    const res = await userRequest.put("/posts/like/" + id);
+
+    likeAmount.innerHTML = `${formater.format(res.data.likes)} like${
+      res.data.likes > 1 ? "s" : ""
+    }`;
+    if (postUpdate) {
+      likeAmountUpdate.innerHTML = `${formater.format(res.data.likes)} like${
         res.data.likes > 1 ? "s" : ""
       }`;
     }
   };
-  const likePost = () => {
-    if (!isLiked) {
-      updateLike("inc");
-      heartActive.classList.add("active");
-      isLiked = true;
-    } else {
-      updateLike("dec");
-      heartActive.classList.remove("active");
-      isLiked = false;
-    }
+
+  const likePostItem = () => {
+    updateLike();
+    heartActive.classList.toggle("active");
+    if (postUpdate) heartActiveUpdate.classList.toggle("active");
   };
   const likePostImage = () => {
-    if (!isLiked) {
-      updateLike("inc");
-      heartActive.classList.add("active");
-      isLiked = true;
-    }
+    updateLike();
+    heartActive.classList.add("active");
+    if (postUpdate) heartActiveUpdate.classList.add("active");
   };
 
   postImage.addEventListener("dblclick", likePostImage);
-  heart.addEventListener("click", likePost);
+  heart.addEventListener("click", likePostItem);
 };
 
 const addCommentActive = (post) => {
@@ -344,48 +354,31 @@ const addCommentActive = (post) => {
   });
 };
 
-//Post-overlay-------------------------------------------
 const likeComment = (comment) => {
+  const id = comment.dataset.id;
   const heartComment = comment.querySelector(".heart-comment");
   const heartCommentActive = comment.querySelector(".heart-comment-active");
   const commentLike = comment.querySelector(".comment-like");
-  let isLiked = heartCommentActive.classList.contains("active");
-  const id = comment.dataset.id;
 
-  const updateLike = async (type) => {
-    if (type === "inc") {
-      const res = await userRequest.put("/comments/like/" + id);
-      commentLike.innerHTML = `${formater.format(res.data.likes)} like${
-        res.data.likes > 1 ? "s" : ""
-      }`;
-    } else if (type === "dec") {
-      const res = await userRequest.put("/comments/like/" + id);
-      commentLike.innerHTML = `${formater.format(res.data.likes)} like${
-        res.data.likes > 1 ? "s" : ""
-      }`;
-    }
+  const updateLike = async () => {
+    const res = await userRequest.put("/comments/like/" + id);
+    commentLike.innerHTML = `${formater.format(res.data.likes)} like${
+      res.data.likes > 1 ? "s" : ""
+    }`;
   };
   const handleLikeComment = () => {
-    if (!isLiked) {
-      updateLike("inc");
-      heartCommentActive.classList.add("active");
-      isLiked = true;
-    } else {
-      updateLike("dec");
-      heartCommentActive.classList.remove("active");
-      isLiked = false;
-    }
+    updateLike();
+    heartCommentActive.classList.toggle("active");
   };
 
   heartComment.addEventListener("click", handleLikeComment);
 };
 
-const handleAddComment = async (post) => {
+const handleAddComment = async (post, postData) => {
   try {
-    const addCommentInput = postOverlay.querySelector(".add-comment-input");
-
+    const addCommentInput = post.querySelector(".add-comment-input");
     const res = await userRequest.post("/comments", {
-      postId: post._id,
+      postId: postData._id,
       content: addCommentInput.value,
     });
     const element = document.createElement("div");
@@ -400,9 +393,11 @@ const handleAddComment = async (post) => {
           alt="avt"
         />
         <div class="comment-info">
-          <p>
-            <span>${myAccount.username}</span>${addCommentInput.value}
-          </p>
+          <div>
+            <a href="./profile.html">
+              <span>${myAccount.username}</span>
+            </a>${addCommentInput.value}
+          </div>
           <div class="comment-info-reply">
             <p class="comment-time">1s</p>
             <button class="btn-reply-comment">Reply</button>
@@ -420,7 +415,7 @@ const handleAddComment = async (post) => {
       </div>
     `;
     addCommentInput.value = "";
-    const commentsContainer = postOverlay.querySelector(".comments-container");
+    const commentsContainer = post.querySelector(".comments-container");
     commentsContainer.insertBefore(element, commentsContainer.children[0]);
   } catch (error) {
     console.log(error);
@@ -432,9 +427,10 @@ const handleAddComment = async (post) => {
   });
 };
 
+//Post-overlay-------------------------------------------
 const openPostOverlay = async (post) => {
   const id = post.dataset.id;
-  const postData = Posts.find((p) => p._id === id);
+  const postData = await getPost(id);
   const user = Users.find((u) => u._id === postData.userId);
 
   postOverlay.classList.add("open-modal");
@@ -457,7 +453,7 @@ const openPostOverlay = async (post) => {
   ).join("");
 
   //Like post
-  likePost(postOverlay);
+  likePost(postOverlay, post);
 
   if (postData.numOfPhoto === 0) {
     handlePostVideo(postOverlay);
@@ -467,12 +463,12 @@ const openPostOverlay = async (post) => {
   }
 
   //Form add comment
+  addCommentActive(postOverlay);
   const formAddComment = postOverlay.querySelector(".add-comment");
   formAddComment.addEventListener("submit", (e) => {
     e.preventDefault();
-    handleAddComment(postData);
+    handleAddComment(postOverlay, postData);
   });
-  addCommentActive(postOverlay);
   const comments = postOverlay.querySelectorAll(".comment");
   comments.forEach((comment) => {
     likeComment(comment);
@@ -487,8 +483,21 @@ const openPostOverlay = async (post) => {
 
 // Post action ----------------------------------
 postItem.forEach((post) => {
+  const id = post.dataset.id;
+  const postData = Posts.find((p) => p._id === id);
+
+  //Like
   likePost(post);
+
+  //Comment
   addCommentActive(post);
+  const formAddComment = post.querySelector(".add-comment");
+  formAddComment.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await handleAddComment(post, postData);
+  });
+
+  //Show post overlay
   const btnComment = post.querySelector(".comment");
   const commentAmount = post.querySelector(".comments-amount");
   btnComment.addEventListener("click", () => {

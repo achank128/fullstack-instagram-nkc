@@ -1,7 +1,6 @@
 import { publicRequest } from "./api.js";
 
-const user = localStorage.getItem("user");
-if (user) {
+if (myAccount) {
   location.replace("./home.html");
 }
 

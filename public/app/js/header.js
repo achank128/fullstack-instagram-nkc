@@ -1,15 +1,9 @@
-import { Users, IMGURL } from "./data.js";
+import { Users, IMGURL, myAccount } from "./data.js";
 import { userRequest } from "./api.js";
-const myAccount = JSON.parse(localStorage.getItem("user"));
 
 //HEADER
 //Overlay
 const overlay = document.getElementById("overlay");
-//Create post input
-const selectFileInput = document.querySelector(".select-file");
-const createPostContent = document.querySelector(".create-post-content");
-const sharePostBtn = document.querySelector(".share-post-btn");
-const captionPostInput = document.querySelector(".caption-post");
 //Search Input
 const inputSearch = document.getElementById("input-search");
 const searchHistory = document.querySelector(".search-history");
@@ -19,6 +13,13 @@ const navCreatePost = document.querySelector(".nav-create-post");
 const navCreatePostOn = document.querySelector(".nav-create-post-on");
 const createPostOverlay = document.querySelector(".create-post-overlay");
 const btnCloseCreatePost = document.querySelector(".close-create-post-btn");
+//Create post input
+const selectFileInput = createPostOverlay.querySelector(".select-file");
+const createPostContent = createPostOverlay.querySelector(
+  ".create-post-content"
+);
+const sharePostBtn = createPostOverlay.querySelector(".share-post-btn");
+const captionPostInput = createPostOverlay.querySelector(".caption-post");
 //Notify
 const navNotify = document.querySelector(".nav-notify");
 const navNotifyOn = document.querySelector(".nav-notify-on");
@@ -63,7 +64,7 @@ const handleUpload = async () => {
       data.append("file", file);
     });
     try {
-      const res = await axios.post("http://localhost:5000/api/upload", data);
+      const res = await userRequest.post("/upload", data);
       res.data.forEach((file) => {
         filesName.push(file.filename);
       });
@@ -81,7 +82,6 @@ const handleCreatePost = async (filesName) => {
 
   try {
     const res = await userRequest.post("/posts", {
-      userId: user._id,
       desc: captionPostInput.value,
       numOfPhoto: postVideo ? 0 : filesName.length,
       photo: filesName.length === 1 ? filesName[0] : null,
@@ -177,7 +177,7 @@ notifyContent.innerHTML = `
         <div class="notify-info">
           <span>${user.username}</span>
           <p class="notify-desc">started follow you.</p>
-          <p class="notify-time">${user.id}w</p>
+          <p class="notify-time">1d</p>
         </div>
         <button class="notify-btn-follow">Follow</button>
       </div>

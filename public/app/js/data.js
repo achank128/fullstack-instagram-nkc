@@ -1,6 +1,49 @@
-export const IMGURL = "https://instagram-api-nkc.herokuapp.com/images/";
+// export const IMGURL = "https://instagram-api-nkc.herokuapp.com/image/";
+// export const BASE_URL = "https://instagram-api-nkc.herokuapp.com/api";
+export const IMGURL = "http://localhost:5000/image/";
+export const BASE_URL = "http://localhost:5000/api";
 export const myAccount = JSON.parse(localStorage.getItem("user"));
 
+export const formater = Intl.NumberFormat("en-US");
+export const formaterK = (num) => {
+  if (num > 1000000) {
+    const million = ((num % 1000000000) - (num % 1000000)) / 1000000;
+    const thousand = ((num % 1000000) - (num % 100000)) / 100000;
+    return `${million},${thousand}m`;
+  } else if (num > 10000) {
+    const thousand = ((num % 1000000) - (num % 1000)) / 1000;
+    const hundred = ((num % 1000) - (num % 100)) / 100;
+    return `${thousand},${hundred}k`;
+  }
+  return Intl.NumberFormat("en-US").format(num);
+};
+
+export const timeSince = (date) => {
+  var seconds = Math.floor((new Date() - date) / 1000);
+
+  var interval = seconds / 31536000;
+
+  if (interval > 1) {
+    return Math.floor(interval) + " years";
+  }
+  interval = seconds / 2592000;
+  if (interval > 1) {
+    return Math.floor(interval) + " months";
+  }
+  interval = seconds / 86400;
+  if (interval > 1) {
+    return Math.floor(interval) + " days";
+  }
+  interval = seconds / 3600;
+  if (interval > 1) {
+    return Math.floor(interval) + " hours";
+  }
+  interval = seconds / 60;
+  if (interval > 1) {
+    return Math.floor(interval) + " minutes";
+  }
+  return Math.floor(seconds) + " seconds";
+};
 export const Users = [
   {
     id: 1,
@@ -248,108 +291,21 @@ export const Comments = [
   },
 ];
 
-export const myAccountStatic = {
-  id: 0,
-  username: "achank128",
-  profilePicture: "./image/mypost/profile.jpg",
-  name: "Nguyễn Khắc Cháng",
-  bio: "www.facebook.com/achank128",
-  numOfPost: 36,
-  followers: 63,
-  following: 333,
-  photo: [
-    "./image/mypost/1.jpg",
-    "./image/mypost/2.jpg",
-    "./image/mypost/3.jpg",
-    "./image/mypost/4.jpg",
-    "./image/mypost/5.jpg",
-    "./image/mypost/6.jpg",
-    "./image/mypost/7.jpg",
-    "./image/mypost/8.jpg",
-    "./image/mypost/9.jpg",
-    "./image/mypost/10.jpg",
-    "./image/mypost/11.jpg",
-    "./image/mypost/12.jpg",
-    "./image/mypost/13.jpg",
-    "./image/mypost/14.jpg",
-    "./image/mypost/15.jpg",
-    "./image/mypost/16.jpg",
-    "./image/mypost/17.jpg",
-    "./image/mypost/18.jpg",
-    "./image/mypost/19.jpg",
-    "./image/mypost/20.jpg",
-    "./image/mypost/21.jpg",
-    "./image/mypost/22.jpg",
-    "./image/mypost/23.jpg",
-    "./image/mypost/24.jpg",
-    "./image/mypost/25.jpg",
-    "./image/mypost/26.jpg",
-    "./image/mypost/27.jpg",
-    "./image/mypost/28.jpg",
-    "./image/mypost/29.jpg",
-    "./image/mypost/30.jpg",
-    "./image/mypost/31.jpg",
-    "./image/mypost/32.jpg",
-    "./image/mypost/33.jpg",
-    "./image/mypost/34.jpg",
-    "./image/mypost/35.jpg",
-    "./image/mypost/36.jpg",
-  ],
-};
-
-export const formater = Intl.NumberFormat("en-US");
-export const formaterK = (num) => {
-  if (num > 1000000) {
-    const million = ((num % 1000000000) - (num % 1000000)) / 1000000;
-    const thousand = ((num % 1000000) - (num % 100000)) / 100000;
-    return `${million},${thousand}m`;
-  } else if (num > 10000) {
-    const thousand = ((num % 1000000) - (num % 1000)) / 1000;
-    const hundred = ((num % 1000) - (num % 100)) / 100;
-    return `${thousand},${hundred}k`;
-  }
-  return Intl.NumberFormat("en-US").format(num);
-};
-
-export const timeSince = (date) => {
-  var seconds = Math.floor((new Date() - date) / 1000);
-
-  var interval = seconds / 31536000;
-
-  if (interval > 1) {
-    return Math.floor(interval) + " years";
-  }
-  interval = seconds / 2592000;
-  if (interval > 1) {
-    return Math.floor(interval) + " months";
-  }
-  interval = seconds / 86400;
-  if (interval > 1) {
-    return Math.floor(interval) + " days";
-  }
-  interval = seconds / 3600;
-  if (interval > 1) {
-    return Math.floor(interval) + " hours";
-  }
-  interval = seconds / 60;
-  if (interval > 1) {
-    return Math.floor(interval) + " minutes";
-  }
-  return Math.floor(seconds) + " seconds";
-};
-
+//New Feed Post ---------------------------
 export const postPhoto = (post, user) => {
   return `
 <div class="post-item post-photo" data-id=${post._id}>
   <!-- Post top -->
   <div class="top">
-    <div class="top-left">
-      <img
+    <a href="./profile.html?${user.username}">
+      <div class="top-left">
+        <img
         src=${IMGURL + user.profilePicture}
         alt="avt"
-      />
-      <span>${user.username}</span>
-    </div>
+        />
+        <span>${user.username}</span>
+      </div>
+    </a>
     <span class="top-right">
       <i class="fa-solid fa-ellipsis"></i>
     </span>
@@ -413,7 +369,10 @@ export const postPhoto = (post, user) => {
         like${post.likes && post.likes.length > 1 ? "s" : ""} 
       </p>
       <p class="user">
-        <span>${user.username}</span>${post.desc}<button>more</button>
+        <a href="./profile.html?${user.username}">
+          <span>${user.username}</span>
+        </a>
+        ${post.desc}<button>more</button>
       </p>
       <button class="comments-amount">View all ${formater.format(
         post.comments.length
@@ -421,6 +380,7 @@ export const postPhoto = (post, user) => {
       
       <p class="post-date">${timeSince(Date.parse(post.createdAt))}</p>
     </div>
+    <div class="comments-container"></div>
     <form class="add-comment">
       <button class="emojis">
         <i class="fa-regular fa-face-smile"></i>
@@ -437,13 +397,15 @@ export const postPhotos = (post, user) => {
 <div class="post-item post-photos"  data-id=${post._id}>
   <!-- Post top -->
   <div class="top">
+  <a href="./profile.html?${user.username}">
     <div class="top-left">
       <img
-        src=${IMGURL + user.profilePicture}
-        alt="avt"
+      src=${IMGURL + user.profilePicture}
+      alt="avt"
       />
       <span>${user.username}</span>
     </div>
+  </a>
     <span class="top-right">
       <i class="fa-solid fa-ellipsis"></i>
     </span>
@@ -525,7 +487,10 @@ export const postPhotos = (post, user) => {
         like${post.likes && post.likes.length > 1 ? "s" : ""} 
       </p>
       <p class="user">
-        <span>${user.username}</span>${post.desc}<button>more</button>
+        <a href="./profile.html?${user.username}">
+          <span>${user.username}</span>
+        </a>
+        ${post.desc}<button>more</button>
       </p>
       <button class="comments-amount">View all ${formater.format(
         post.comments.length
@@ -533,6 +498,8 @@ export const postPhotos = (post, user) => {
       
       <p class="post-date">${timeSince(Date.parse(post.createdAt))}</p>
     </div>
+
+    <div class="comments-container"></div>
     <form class="add-comment">
       <button class="emojis">
         <i class="fa-regular fa-face-smile"></i>
@@ -549,13 +516,15 @@ export const postVideo = (post, user) => {
 <div class="post-item post-video " data-id=${post._id}>
   <!-- Post top -->
   <div class="top">
-    <div class="top-left">
-      <img
+    <a href="./profile.html?${user.username}">
+      <div class="top-left">
+        <img
         src=${IMGURL + user.profilePicture}
         alt="avt"
-      />
-      <span>${user.username}</span>
-    </div>
+        />
+        <span>${user.username}</span>
+      </div>
+    </a>
     <span class="top-right">
       <i class="fa-solid fa-ellipsis"></i>
     </span>
@@ -622,7 +591,10 @@ export const postVideo = (post, user) => {
       like${post.likes && post.likes.length > 1 ? "s" : ""}
     </p>
       <p class="user">
-        <span>${user.username}</span>${post.desc}<button>more</button>
+        <a href="./profile.html?${user.username}">
+          <span>${user.username}</span>
+        </a>
+        ${post.desc}<button>more</button>
       </p>
       <button class="comments-amount">View all ${formater.format(
         post.comments.length
@@ -630,6 +602,8 @@ export const postVideo = (post, user) => {
       
       <p class="post-date">${timeSince(Date.parse(post.createdAt))}</p>
     </div>
+
+    <div class="comments-container"></div>
     <form class="add-comment">
       <button class="emojis">
         <i class="fa-regular fa-face-smile"></i>
@@ -641,6 +615,273 @@ export const postVideo = (post, user) => {
 </div>`;
 };
 
+//Explore Post ------------------------------
+export const displayGroup2photo1video = (postPhoto1, postPhoto2, postVideo) => {
+  return `
+<div class="group-1-2photo-1video" >
+  <div class="post-item post-photo" data-id=${postPhoto1.id}>
+    <a >
+      <img src=${
+        postPhoto1.numOfPhoto > 1 ? postPhoto1.photos[0] : postPhoto1.photo
+      } />
+      ${
+        postPhoto1.numOfPhoto > 1
+          ? `<span class="multiphoto"><i class="fa-solid fa-clone"></i></span>`
+          : ""
+      }
+      
+      <div class="hover-overlay">
+        <div class="amount">
+          <span class="heart-amount">
+            <i class="fa-solid fa-heart"></i>
+            <p>${formater.format(postPhoto1.like)}</p>
+          </span>
+          <span class="comment-amount">
+            <i class="fa-solid fa-comment"></i>
+            <p>${formater.format(postPhoto1.comment)}</p>
+          </span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="post-item post-video" data-id=${postVideo.id}>
+    <a >
+      <video autoplay loop muted>
+            <source src=${postVideo.video} type="video/mp4">
+            Your browser does not support the video tag.
+      </video>
+      <span class="videoplay"><i class="fa-solid fa-play"></i></span>
+      <div class="hover-overlay">
+        <div class="amount">
+          <span class="view-amount">
+            <i class="fa-solid fa-play"></i>
+            <p>${formaterK(postVideo.view)}</p>
+          </span>
+          <span class="comment-amount">
+            <i class="fa-solid fa-comment"></i>
+            <p>${formater.format(postVideo.comment)}</p>
+          </span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="post-item post-photo" data-id=${postPhoto2.id}>
+    <a >
+      <img
+        class="photo"
+        src=${
+          postPhoto2.numOfPhoto > 1 ? postPhoto2.photos[0] : postPhoto2.photo
+        }
+        alt="avt"
+      />
+      ${
+        postPhoto2.numOfPhoto > 1
+          ? `<span class="multiphoto"><i class="fa-solid fa-clone"></i></span>`
+          : ""
+      }
+      <div class="hover-overlay">
+        <div class="amount">
+          <span class="heart-amount">
+            <i class="fa-solid fa-heart"></i>
+            <p>${formater.format(postPhoto2.like)}</p>
+          </span>
+          <span class="comment-amount">
+            <i class="fa-solid fa-comment"></i>
+            <p>${formater.format(postPhoto2.comment)}</p>
+          </span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+  `;
+};
+
+export const displayGroup3photo = (postPhoto1, postPhoto2, postPhoto3) => {
+  return ` 
+<div class="group-2-3photo">
+  <div class="post-item post-photo" data-id=${postPhoto1.id}>
+    <a >
+      <img
+        class="photo"
+        src=${
+          postPhoto1.numOfPhoto > 1 ? postPhoto1.photos[0] : postPhoto1.photo
+        }
+        alt="avt"
+      />
+      ${
+        postPhoto1.numOfPhoto > 1
+          ? `<span class="multiphoto"><i class="fa-solid fa-clone"></i></span>`
+          : ""
+      }
+      <div class="hover-overlay">
+        <div class="amount">
+          <span class="heart-amount">
+            <i class="fa-solid fa-heart"></i>
+            <p>${formater.format(postPhoto1.like)}</p>
+          </span>
+          <span class="comment-amount">
+            <i class="fa-solid fa-comment"></i>
+            <p>${formater.format(postPhoto1.comment)}</p>
+          </span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="post-item post-photo" data-id=${postPhoto2.id}>
+    <a >
+      <img
+        class="photo"
+        src=${
+          postPhoto2.numOfPhoto > 1 ? postPhoto2.photos[0] : postPhoto2.photo
+        }
+        alt="avt"
+      />
+      ${
+        postPhoto2.numOfPhoto > 1
+          ? `<span class="multiphoto"><i class="fa-solid fa-clone"></i></span>`
+          : ""
+      }
+      <div class="hover-overlay">
+        <div class="amount">
+          <span class="heart-amount">
+            <i class="fa-solid fa-heart"></i>
+            <p>${formater.format(postPhoto2.like)}</p>
+          </span>
+          <span class="comment-amount">
+            <i class="fa-solid fa-comment"></i>
+            <p>${formater.format(postPhoto2.comment)}</p>
+          </span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="post-item post-photo" data-id=${postPhoto3.id}>
+    <a >
+      <img
+        class="photo"
+        src=${
+          postPhoto3.numOfPhoto > 1 ? postPhoto3.photos[0] : postPhoto3.photo
+        }
+        alt="avt"
+      />
+      ${
+        postPhoto3.numOfPhoto > 1
+          ? `<span class="multiphoto"><i class="fa-solid fa-clone"></i></span>`
+          : ""
+      }
+      <div class="hover-overlay">
+        <div class="amount">
+          <span class="heart-amount">
+            <i class="fa-solid fa-heart"></i>
+            <p>${formater.format(postPhoto3.like)}</p>
+          </span>
+          <span class="comment-amount">
+            <i class="fa-solid fa-comment"></i>
+            <p>${formater.format(postPhoto3.comment)}</p>
+          </span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+  `;
+};
+
+export const displayGroup1video2photo = (postVideo, postPhoto1, postPhoto2) => {
+  return `
+<div class="group-3-1video-2photo">
+  <div class="post-item post-video" data-id=${postVideo.id}>
+    <a >
+      <video class="video-post" autoplay loop muted>
+        <source src=${postVideo.video} type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <span class="videoplay"><i class="fa-solid fa-play"></i></span>
+      <div class="hover-overlay">
+        <div class="amount">
+          <span class="view-amount">
+            <i class="fa-solid fa-play"></i>
+            <p>${formaterK(postVideo.view)}</p>
+          </span>
+          <span class="comment-amount">
+            <i class="fa-solid fa-comment"></i>
+            <p>${formater.format(postVideo.comment)}</p>
+          </span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="post-item post-photo" data-id=${postPhoto1.id}>
+    <div class="post-photo-content">
+      <a >
+        <img
+        class="photo"
+        src=${
+          postPhoto1.numOfPhoto > 1 ? postPhoto1.photos[0] : postPhoto1.photo
+        } 
+        alt="avt" />
+        ${
+          postPhoto1.numOfPhoto > 1
+            ? `<span class="multiphoto"><i class="fa-solid fa-clone"></i></span>`
+            : ""
+        }
+        <div class="hover-overlay">
+          <div class="amount">
+            <span class="heart-amount">
+              <i class="fa-solid fa-heart"></i>
+              <p>${formater.format(postPhoto1.like)}</p>
+            </span>
+            <span class="comment-amount">
+              <i class="fa-solid fa-comment"></i>
+              <p>${formater.format(postPhoto1.comment)}</p>
+            </span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="post-item post-photo" data-id=${postPhoto2.id}>
+    <div class="post-photo-content">
+      <a >
+        <img
+          class="photo"
+          src=${
+            postPhoto2.numOfPhoto > 1 ? postPhoto2.photos[0] : postPhoto2.photo
+          } 
+          alt="avt"
+        />
+        ${
+          postPhoto2.numOfPhoto > 1
+            ? `<span class="multiphoto"><i class="fa-solid fa-clone"></i></span>`
+            : ""
+        }
+        <div class="hover-overlay">
+          <div class="amount">
+            <span class="heart-amount">
+              <i class="fa-solid fa-heart"></i>
+              <p>${formater.format(postPhoto2.like)}</p>
+            </span>
+            <span class="comment-amount">
+              <i class="fa-solid fa-comment"></i>
+              <p>${formater.format(postPhoto2.comment)}</p>
+            </span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+`;
+};
+
+//Overlay Post -------------------------------
 export const showPostOverlay = (post, user) => {
   return `
   <div class="post-modal-content">
@@ -656,7 +897,9 @@ export const showPostOverlay = (post, user) => {
             src=${IMGURL + user.profilePicture}
             alt="avt"
           />
-          <span>${user.username}</span>
+          <a href="./profile.html?${user.username}">
+            <span>${user.username}</span>
+          </a>
         </div>
         <span class="top-right">
           <i class="fa-solid fa-ellipsis"></i>
@@ -672,7 +915,10 @@ export const showPostOverlay = (post, user) => {
             />
             <div class="post-caption">
               <p>
-                <span>${user.username}</span>${post.desc}
+              <a href="./profile.html?${user.username}">
+                <span>${user.username}</span>
+              </a>
+              ${post.desc}
                 <button>more</button>
               </p>
               <p class="post-date-min">${timeSince(
@@ -820,7 +1066,9 @@ export const showComment = (comment, user) => {
           />
           <div class="comment-info">
             <p>
-              <span>${user.username}</span>${comment.content}
+              <a href="./profile.html?${user.username}">
+                <span>${user.username}</span>
+              </a>${comment.content}
             </p>
             <div class="comment-info-reply">
               <p class="comment-time">${timeSince(

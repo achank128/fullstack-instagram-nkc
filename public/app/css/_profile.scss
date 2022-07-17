@@ -68,6 +68,44 @@
     }
   }
 }
+.edit-profile {
+  display: none;
+  .edit-profile-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    position: relative;
+    label {
+      font-size: $font-sm;
+    }
+    input {
+      padding: 10px 8px;
+      margin-bottom: 16px;
+      background-color: $background;
+      border: 1px solid $border-color;
+      border-radius: 4px;
+      font-size: $font-xsm;
+      &:focus {
+        outline: none;
+      }
+    }
+    .select-file {
+      border: none;
+    }
+    .select-file::before {
+      left: 25%;
+    }
+    .btn-save-edit {
+      width: 60px;
+      background-color: $text-blue;
+      color: $white-color;
+      font-weight: 600;
+      padding: 8px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+  }
+}
 .profile-info-detail {
   width: 66.66%;
   display: flex;

@@ -153,11 +153,24 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
+    <!-- Post modal overlay -->
+    <div class="post-overlay"></div>
 
     <div class="container profile">
       <!-- Info -->
       <div class="profile-info"></div>
       <div class="profile-info-mobile"></div>
+      <div class="edit-profile">
+        <form class="edit-profile-form">
+          <label>Avatar:</label>
+          <input class="select-file" type="file" accept=".png, .jpeg, .jpg" />
+          <label>Full Name:</label>
+          <input class="fullname-input" type="text" placeholder="Full Name" />
+          <label>Bio:</label>
+          <input class="bio-input" type="text" placeholder="Bio" />
+          <button class="btn-save-edit" type="submit">Save</button>
+        </form>
+      </div>
       <!-- Post bar -->
       <div class="post-bar">
         <a href="#" class="posts-page active-bar">

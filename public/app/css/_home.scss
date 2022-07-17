@@ -332,6 +332,84 @@
           color: $text-gray;
         }
       }
+      .comments-container {
+        padding: 0 16px;
+      }
+      .comment {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .comment-account {
+          display: flex;
+          align-items: center;
+          margin-bottom: 8px;
+          font-size: $font-sm;
+          span {
+            font-weight: 500;
+            margin-right: 5px;
+            &:hover {
+              text-decoration: underline;
+              cursor: pointer;
+            }
+          }
+          img {
+            display: none;
+          }
+          .comment-info-reply {
+            display: flex;
+            align-items: center;
+            color: $text-gray;
+            font-size: $font-xsm;
+            margin: 6px 0;
+            i {
+              display: none;
+              font-size: $font-sm;
+              cursor: pointer;
+            }
+            &:hover {
+              i {
+                display: block;
+              }
+            }
+            .comment-time {
+              margin-right: 12px;
+            }
+            .comment-like {
+              font-weight: 500;
+              margin-right: 12px;
+            }
+            .btn-reply-comment {
+              margin-right: 12px;
+              color: $text-gray;
+              font-weight: 500;
+              font-size: $font-xsm;
+              cursor: pointer;
+            }
+          }
+        }
+        .heart-comment {
+          position: relative;
+          margin-right: 16px;
+          .heart-comment-default {
+            background-color: $white-color;
+            :hover {
+              color: $text-gray;
+            }
+          }
+          .heart-comment-active {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            color: #ed4956;
+            background-color: $white-color;
+            animation: scaleIcon 200ms linear;
+          }
+        }
+      }
       .add-comment {
         display: flex;
         align-items: center;

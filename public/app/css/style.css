@@ -236,6 +236,28 @@ button {
   visibility: visible !important;
 }
 
+.select-file {
+  width: 1px;
+  overflow: hidden;
+}
+
+.select-file::before {
+  content: "Select from computer";
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+  background-color: #0095f6;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 600;
+  padding: 7px 12px;
+  cursor: pointer;
+}
+
 .header {
   height: 60px;
   width: 100%;
@@ -1210,6 +1232,112 @@ button {
   color: #8e8e8e;
 }
 
+#feed .post-item .bottom .comments-container {
+  padding: 0 16px;
+}
+
+#feed .post-item .bottom .comment {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+#feed .post-item .bottom .comment .comment-account {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+}
+
+#feed .post-item .bottom .comment .comment-account span {
+  font-weight: 500;
+  margin-right: 5px;
+}
+
+#feed .post-item .bottom .comment .comment-account span:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#feed .post-item .bottom .comment .comment-account img {
+  display: none;
+}
+
+#feed .post-item .bottom .comment .comment-account .comment-info-reply {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  color: #8e8e8e;
+  font-size: 0.75rem;
+  margin: 6px 0;
+}
+
+#feed .post-item .bottom .comment .comment-account .comment-info-reply i {
+  display: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+#feed .post-item .bottom .comment .comment-account .comment-info-reply:hover i {
+  display: block;
+}
+
+#feed .post-item .bottom .comment .comment-account .comment-info-reply .comment-time {
+  margin-right: 12px;
+}
+
+#feed .post-item .bottom .comment .comment-account .comment-info-reply .comment-like {
+  font-weight: 500;
+  margin-right: 12px;
+}
+
+#feed .post-item .bottom .comment .comment-account .comment-info-reply .btn-reply-comment {
+  margin-right: 12px;
+  color: #8e8e8e;
+  font-weight: 500;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+#feed .post-item .bottom .comment .heart-comment {
+  position: relative;
+  margin-right: 16px;
+}
+
+#feed .post-item .bottom .comment .heart-comment .heart-comment-default {
+  background-color: #fff;
+}
+
+#feed .post-item .bottom .comment .heart-comment .heart-comment-default :hover {
+  color: #8e8e8e;
+}
+
+#feed .post-item .bottom .comment .heart-comment .heart-comment-active {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  color: #ed4956;
+  background-color: #fff;
+  -webkit-animation: scaleIcon 200ms linear;
+          animation: scaleIcon 200ms linear;
+}
+
 #feed .post-item .bottom .add-comment {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -1545,28 +1673,6 @@ button {
   .create-post-overlay .create-post-content p {
     font-size: 1.125rem;
   }
-}
-
-.create-post-overlay .select-file {
-  width: 1px;
-  overflow: hidden;
-}
-
-.create-post-overlay .select-file::before {
-  content: "Select from computer";
-  position: absolute;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  text-align: center;
-  display: inline-block;
-  white-space: nowrap;
-  background-color: #0095f6;
-  color: #fff;
-  border-radius: 4px;
-  font-weight: 600;
-  padding: 7px 12px;
-  cursor: pointer;
 }
 
 .create-post-overlay .caption-post {
@@ -2600,6 +2706,57 @@ button {
   .bottom-follower div {
     font-size: 0.875rem;
   }
+}
+
+.edit-profile {
+  display: none;
+}
+
+.edit-profile .edit-profile-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  max-width: 300px;
+  position: relative;
+}
+
+.edit-profile .edit-profile-form label {
+  font-size: 0.875rem;
+}
+
+.edit-profile .edit-profile-form input {
+  padding: 10px 8px;
+  margin-bottom: 16px;
+  background-color: #fafafa;
+  border: 1px solid #dbdbdb;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.edit-profile .edit-profile-form input:focus {
+  outline: none;
+}
+
+.edit-profile .edit-profile-form .select-file {
+  border: none;
+}
+
+.edit-profile .edit-profile-form .select-file::before {
+  left: 25%;
+}
+
+.edit-profile .edit-profile-form .btn-save-edit {
+  width: 60px;
+  background-color: #0095f6;
+  color: #fff;
+  font-weight: 600;
+  padding: 8px;
+  margin-bottom: 20px;
+  border-radius: 4px;
 }
 
 .profile-info-detail {

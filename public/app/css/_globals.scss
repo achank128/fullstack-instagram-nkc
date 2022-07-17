@@ -76,3 +76,22 @@ button {
   z-index: 1001 !important;
   visibility: visible !important;
 }
+.select-file {
+  width: 1px;
+  overflow: hidden;
+}
+.select-file::before {
+  content: "Select from computer";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  display: inline-block;
+  white-space: nowrap;
+  background-color: $text-blue;
+  color: $white-color;
+  border-radius: 4px;
+  font-weight: 600;
+  padding: 7px 12px;
+  cursor: pointer;
+}
