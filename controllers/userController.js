@@ -80,30 +80,53 @@ const getFollowUsers = async (req, res) => {
     const currentUser = await User.findById(req.user.userId);
     const followUsers = await Promise.all(
       currentUser.followings.map((friendId) => {
-        return User.findById(friendId);
+        return User.findById(friendId).select("-password");
       })
     );
     res.status(200).json(followUsers);
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json(error);
+  }
 };
 
 const getSuggestUsers = async (req, res) => {
-  const currentUser = await User.findById(req.user.userId);
-  const followUsers = await Promise.all(
-    currentUser.followings.map((friendId) => {
-      const user = User.findById(friendId);
-      return user;
+  try {
+    const currentUser = await User.findById(req.user.userId);
+    const followUsers = await Promise.all(
+      currentUser.followings.map((friendId) => {
+        const user = User.findById(friendId);
+        return user;
+      })
+    );
+    const followUsersId = followUsers.map((u) => u._id);
+    const users = await User.find({
+      _id: { $nin: [req.user.userId, ...followUsersId] },
     })
-  );
-  const followUsersId = followUsers.map((u) => u._id);
-  const users = await User.find({
-    _id: { $nin: [req.user.userId, ...followUsersId] },
-  });
-  res.status(200).json(users);
+      .select("-password")
+      .sort({ createdAt: 1 })
+      .limit(5);
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const getSearchUsers = async (req, res) => {
+  try {
+    const users = await User.find({
+      username: { $regex: req.query.search, $options: "i" },
+      fullName: { $regex: req.query.search, $options: "i" },
+    })
+      .limit(5)
+      .select("-password");
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json(error);
+  }
 };
 
 const getAllUsers = async (req, res) => {
-  const users = await User.find();
+  const users = await User.find().select("-password");
   res.status(200).json(users);
 };
 
@@ -115,5 +138,6 @@ module.exports = {
   unfollowUser,
   getFollowUsers,
   getSuggestUsers,
+  getSearchUsers,
   getAllUsers,
 };

@@ -229,9 +229,10 @@
         right: 10px;
       }
       .photo-amount {
-        margin: 10px 0;
+        margin-top: 4px;
         display: flex;
         justify-content: center;
+        z-index: 100;
         .dot {
           height: 6px;
           width: 6px;
@@ -253,7 +254,6 @@
         display: flex;
         justify-content: space-between;
         padding: 8px;
-        margin-top: -28px;
         z-index: 10;
         position: relative;
         .left {

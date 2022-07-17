@@ -13,6 +13,7 @@ const {
   getAllUsers,
   getFollowUsers,
   getSuggestUsers,
+  getSearchUsers,
 } = require("../controllers/userController");
 
 router.get("/all", authenticate, getAllUsers);
@@ -23,6 +24,7 @@ router
   .put(authenticateUser, updateUser)
   .delete(authenticateUser, deleteUser);
 router.get("/", authenticate, getUser);
+router.get("/search", authenticate, getSearchUsers);
 router.put("/follow/:id", authenticate, followUser);
 router.put("/unfollow/:id", authenticate, unfollowUser);
 

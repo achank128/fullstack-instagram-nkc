@@ -89,7 +89,11 @@ rightbarAccountInfo.innerHTML = `
   </div>
   <button class="btn-account-switch">Switch</button>
 `;
-
+const accountSwitch = document.querySelector(".btn-account-switch");
+accountSwitch.addEventListener("click", () => {
+  localStorage.clear();
+  location.replace("./index.html");
+});
 const suggestUsers = await getSuggestUsers();
 accountSuggestList.innerHTML = suggestUsers
   .map((user) => {

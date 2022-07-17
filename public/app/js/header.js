@@ -1,5 +1,14 @@
-import { Users, IMGURL, myAccount } from "./data.js";
+import { Users, IMGURL, myAccount, searchList } from "./data.js";
 import { userRequest } from "./api.js";
+
+const getSearchUsers = async (search) => {
+  try {
+    const res = await userRequest.get("/users/search?search=" + search);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 //HEADER
 //Overlay
@@ -7,6 +16,7 @@ const overlay = document.getElementById("overlay");
 //Search Input
 const inputSearch = document.getElementById("input-search");
 const searchHistory = document.querySelector(".search-history");
+const searchHistoryContent = document.querySelector(".search-history-content");
 const closeSearchHistory = document.querySelector(".close-search-history");
 //Create Post
 const navCreatePost = document.querySelector(".nav-create-post");
@@ -31,7 +41,52 @@ const navAccountSetting = document.querySelector(".nav-account-setting");
 const logOut = document.querySelector(".log-out");
 
 /* ------------------------------------------------------------------- */
+
+//Navbar
+const deleteAllNav = () => {
+  searchHistory.classList.remove("active");
+  closeSearchHistory.classList.remove("active");
+  navNotifyOn.classList.remove("active");
+  notifyBox.classList.remove("active");
+  navAvatarAccountImg.classList.remove("nav-img-active");
+  navAccountSetting.classList.remove("active");
+};
+
+//Overlay close
+overlay.addEventListener("click", () => {
+  overlay.classList.remove("active");
+  deleteAllNav();
+});
+
+//Search
+inputSearch.addEventListener("focus", () => {
+  deleteAllNav();
+  overlay.classList.add("active");
+  searchHistory.classList.add("active");
+  closeSearchHistory.classList.add("active");
+});
+closeSearchHistory.addEventListener("click", () => {
+  searchHistory.classList.remove("active");
+  closeSearchHistory.classList.remove("active");
+});
+inputSearch.addEventListener("change", async () => {
+  let users = await getSearchUsers(inputSearch.value);
+  if (users) {
+    searchHistoryContent.innerHTML = searchList(users);
+  }
+});
+
 //Create Post
+navCreatePost.addEventListener("click", () => {
+  deleteAllNav();
+  navCreatePostOn.classList.add("active");
+  createPostOverlay.classList.add("open-modal");
+});
+btnCloseCreatePost.addEventListener("click", () => {
+  navCreatePostOn.classList.remove("active");
+  createPostOverlay.classList.remove("open-modal");
+});
+
 var files = [];
 selectFileInput.addEventListener("change", (e) => {
   const fileList = e.target.files;
@@ -96,45 +151,6 @@ const handleCreatePost = async (filesName) => {
 
 sharePostBtn.addEventListener("click", () => {
   handleUpload();
-});
-
-//Navbar
-const deleteAllNav = () => {
-  searchHistory.classList.remove("active");
-  closeSearchHistory.classList.remove("active");
-  navNotifyOn.classList.remove("active");
-  notifyBox.classList.remove("active");
-  navAvatarAccountImg.classList.remove("nav-img-active");
-  navAccountSetting.classList.remove("active");
-};
-
-//Overlay out
-overlay.addEventListener("click", () => {
-  overlay.classList.remove("active");
-  deleteAllNav();
-});
-
-//Input Search click
-inputSearch.addEventListener("focus", () => {
-  deleteAllNav();
-  overlay.classList.add("active");
-  searchHistory.classList.add("active");
-  closeSearchHistory.classList.add("active");
-});
-closeSearchHistory.addEventListener("click", () => {
-  searchHistory.classList.remove("active");
-  closeSearchHistory.classList.remove("active");
-});
-
-//Create Post
-navCreatePost.addEventListener("click", () => {
-  deleteAllNav();
-  navCreatePostOn.classList.add("active");
-  createPostOverlay.classList.add("open-modal");
-});
-btnCloseCreatePost.addEventListener("click", () => {
-  navCreatePostOn.classList.remove("active");
-  createPostOverlay.classList.remove("open-modal");
 });
 
 //Notify

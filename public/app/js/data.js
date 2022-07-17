@@ -1,5 +1,7 @@
-export const IMGURL = "https://instagram-api-nkc.herokuapp.com/image/";
-export const BASE_URL = "https://instagram-api-nkc.herokuapp.com/api";
+// export const IMGURL = "http://localhost:5000/image/";
+// export const BASE_URL = "http://localhost:5000/api";
+export const IMGURL = "https://instagram-nkc.herokuapp.com/image/";
+export const BASE_URL = "https://instagram-nkc.herokuapp.com/api";
 export const myAccount = JSON.parse(localStorage.getItem("user"));
 
 export const formater = Intl.NumberFormat("en-US");
@@ -288,6 +290,28 @@ export const Comments = [
     date: "1h",
   },
 ];
+//Search Account
+export const searchList = (users) => {
+  return `
+  <div class="search-history-list">
+    ${users
+      .map(
+        (user) =>
+          `<div class="account">
+      <img src=${IMGURL + user.profilePicture} alt="avt" />
+      <div class="account-info">
+        <div class="account-name">
+          <a href="./profile.html?${user.username}">
+            <span>${user.username}</span>
+          </a>
+        </div>
+        <div class="account-fullname">${user.fullName}</div>
+      </div>
+    </div>`
+      )
+      .join("")}
+  </div>`;
+};
 
 //New Feed Post ---------------------------
 export const postPhoto = (post, user) => {
