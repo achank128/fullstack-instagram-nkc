@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 const createPost = async (req, res) => {
   try {
-    const post = await Post.create(req.body);
+    const post = await Post.create({ userId: req.user.userId, ...req.body });
     res.status(201).json(post);
   } catch (error) {
     res.status(500).json(error);
@@ -20,12 +20,10 @@ const likePost = async (req, res) => {
         .json({ msg: "The post has been liked", likes: post.likes.length + 1 });
     } else {
       await post.updateOne({ $pull: { likes: req.user.userId } });
-      res
-        .status(200)
-        .json({
-          msg: "The post has been disliked",
-          likes: post.likes.length - 1,
-        });
+      res.status(200).json({
+        msg: "The post has been disliked",
+        likes: post.likes.length - 1,
+      });
     }
   } catch (error) {
     res.status(500).json(error);
@@ -54,37 +52,17 @@ const getUserPost = async (req, res) => {
 const getTimelinePosts = async (req, res) => {
   try {
     const currentUser = await User.findById(req.user.userId);
-    const userPosts = await Post.find({ userId: currentUser._id })
-      .sort({
-        createdAt: -1,
-      })
-      .limit(3);
-    const followPosts = await Promise.all(
-      currentUser.followings.map((friendId) => {
-        return Post.find({ userId: friendId });
-      })
-    );
-    res.status(200).json(userPosts.concat(...followPosts));
+    currentUser.followings.push(req.user.userId);
+    const followPosts = await Post.find({
+      userId: {
+        $in: currentUser.followings,
+      },
+    }).sort({ createdAt: -1 });
+    res.status(200).json(followPosts);
   } catch (error) {
     res.status(500).json(error);
   }
 };
-
-// const getTimelinePosts = async (req, res) => {
-//   try {
-//     const currentUser = await User.findById(req.user.userId);
-//     let usersId = currentUser.followings;
-//     usersId.push(currentUser._id);
-//     const followPosts = await Promise.all(
-//       usersId.map((friendId) => {
-//         return Post.find({ userId: friendId });
-//       })
-//     );
-//     res.status(200).json(followPosts);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// };
 
 module.exports = {
   createPost,

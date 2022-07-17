@@ -13,16 +13,11 @@ const userRouter = require("./routes/users");
 const postRouter = require("./routes/posts");
 const commentRouter = require("./routes/comments");
 
-//app.use("/images", express.static(path.join(__dirname, "public/image")));
-
 //middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-  res.send("INSTAGRAM API");
-});
 //upload file
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -36,7 +31,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 app.post("/api/upload", upload.array("file", 10), (req, res) => {
   try {
-    console.log(req.files);
     res.status(200).json(req.files);
   } catch (error) {
     console.error(error);
