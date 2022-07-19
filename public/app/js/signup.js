@@ -1,4 +1,5 @@
 import { publicRequest } from "./api.js";
+import { myAccount } from "./data.js";
 
 if (myAccount) {
   location.replace("./home.html");
