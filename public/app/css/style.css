@@ -2391,6 +2391,11 @@ button {
   padding-top: 30px;
 }
 
+.explore h2 {
+  margin: 20px;
+  text-align: center;
+}
+
 .explore-posts {
   display: -ms-grid;
   display: grid;

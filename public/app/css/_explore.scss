@@ -3,6 +3,10 @@
   display: flex;
   flex-direction: column;
   padding-top: 30px;
+  h2 {
+    margin: 20px;
+    text-align: center;
+  }
 }
 .explore-posts {
   display: grid;
